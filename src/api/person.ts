@@ -34,7 +34,7 @@ export async function createPersonApi(
 }
 
 export async function getPersonByIdApi(id: string): Promise<PersonResponse> {
-  const res = await api.get(`/person/${id}/vaccinationrecords`);
+  const res = await api.get(`/person/${id}`);
   return res.data;
 }
 
