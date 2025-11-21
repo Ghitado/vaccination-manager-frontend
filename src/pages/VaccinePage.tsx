@@ -1,39 +1,26 @@
-import {
-  Button,
-  Pagination,
-  Paper,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, Paper, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
   createVaccineApi,
   getVaccinesApi,
   type VaccineResponse,
 } from "../api/vaccine";
-import CopyButton from "../components/CopyButton";
-import ScrollableText from "../components/ScrollableText";
+import CustomPagination from "../components/CustomPagination";
+import VaccineTable from "../components/vaccines/VaccineTable";
 
 export default function VaccinePage() {
   const [vaccines, setVaccines] = useState<VaccineResponse[]>([]);
   const [name, setName] = useState("");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
-
   const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
 
-  async function reload(p = page) {
+  const reload = async (p = page) => {
     const res = await getVaccinesApi(p, pageSize);
     setVaccines(res.items);
     setTotalPages(Math.ceil(res.totalCount / res.pageSize));
-  }
+  };
 
   useEffect(() => {
     (async () => {
@@ -42,94 +29,53 @@ export default function VaccinePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, pageSize]);
 
-  async function handleCreate() {
+  const handleCreate = async (e?: React.FormEvent) => {
+    e?.preventDefault();
     if (!name.trim()) return;
-    await createVaccineApi({ name });
-    setName("");
-    reload(page);
-  }
+    setLoading(true);
+
+    await createVaccineApi({ name })
+      .then(() => {
+        setName("");
+        reload(page);
+      })
+      .finally(() => setLoading(false));
+  };
 
   return (
     <Paper elevation={3} sx={{ p: 4, maxWidth: "100%", minHeight: 500 }}>
       <Stack spacing={3}>
-        <Typography variant="h5">Vaccines</Typography>
+        <Typography variant="h5">Gerenciar Vacinas</Typography>
 
-        <Stack direction="row" spacing={2}>
+        <Stack
+          component="form"
+          direction="row"
+          spacing={2}
+          onSubmit={handleCreate}
+        >
           <TextField
-            label="Name"
+            label="Nome da Vacina"
             variant="filled"
             size="small"
             fullWidth
             value={name}
             onChange={(e) => setName(e.target.value)}
+            disabled={loading}
           />
-          <Button variant="contained" onClick={handleCreate}>
-            Add
+          <Button type="submit" variant="contained" disabled={loading}>
+            Adicionar
           </Button>
         </Stack>
 
-        <TableContainer
-          component={Paper}
-          variant="outlined"
-          sx={{ maxHeight: 440 }}
-        >
-          <Table
-            stickyHeader
-            size="small"
-            sx={{
-              "& .MuiTableCell-root": {
-                borderLeft: "1px solid rgba(224, 224, 224, 1)",
-              },
-            }}
-          >
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ width: 120 }}>ID</TableCell>
-                <TableCell>Name</TableCell>
-              </TableRow>
-            </TableHead>
+        <VaccineTable vaccines={vaccines} />
 
-            <TableBody>
-              {vaccines.map((p) => (
-                <TableRow key={p.id} hover>
-                  <TableCell>
-                    <Stack direction="row" spacing={1} alignItems="center">
-                      <CopyButton text={p.id} />
-                      <ScrollableText maxWidth={100}>{p.id}</ScrollableText>
-                    </Stack>
-                  </TableCell>
-
-                  <TableCell>
-                    <ScrollableText maxWidth={230}>{p.name}</ScrollableText>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-
-        <Stack
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          spacing={2}
-        >
-          <Pagination
-            count={totalPages}
-            page={page}
-            onChange={(_, v) => setPage(v)}
-            color="primary"
-            showFirstButton
-            showLastButton
-          />
-        </Stack>
-
-        <Button
-          size="small"
-          onClick={() => setPageSize(pageSize === 5 ? 10 : 5)}
-        >
-          PageSize: {pageSize}
-        </Button>
+        <CustomPagination
+          page={page}
+          totalPages={totalPages}
+          pageSize={pageSize}
+          onChangePage={setPage}
+          onPageSizeChange={setPageSize}
+        />
       </Stack>
     </Paper>
   );
