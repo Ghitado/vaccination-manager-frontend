@@ -1,35 +1,32 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { AppBar, CssBaseline, Toolbar, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import "./App.css";
+import PersonsPage from "./pages/PersonPage";
+import VaccinationRecordPage from "./pages/VaccinationRecordPage";
+import VaccinesPage from "./pages/VaccinePage";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <CssBaseline />
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6">Vaccination Manager</Typography>
+        </Toolbar>
+      </AppBar>
+      <Grid container spacing={2} sx={{ p: 5 }}>
+        <Grid size={12}>
+          <VaccinationRecordPage />
+        </Grid>
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <PersonsPage />
+        </Grid>
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <VaccinesPage />
+        </Grid>
+      </Grid>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
