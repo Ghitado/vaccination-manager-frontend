@@ -18,10 +18,10 @@ export interface VaccinationRecordResponse {
 export async function createVaccinationRecordApi(
   data: CreateVaccinationRecordRequest
 ): Promise<VaccinationRecordResponse> {
-  const res = await api.post(`/vaccinationrecord`, data);
+  const res = await api.post(`/api/vaccinationrecord`, data);
   return res.data;
 }
 
 export async function deleteVaccinationRecordApi(id: string): Promise<void> {
-  await api.delete(`/vaccinationrecord/${id}`);
+  await api.delete(`/api/vaccinationrecord/${id}`);
 }

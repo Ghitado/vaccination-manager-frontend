@@ -13,7 +13,7 @@ export async function getVaccinesApi(
   pageNumber = 1,
   pageSize = 10
 ): Promise<PaginatedResult<VaccineResponse>> {
-  const res = await api.get(`/vaccine`, {
+  const res = await api.get(`/api/vaccine`, {
     params: { pageNumber, pageSize },
   });
   return res.data;
@@ -22,6 +22,6 @@ export async function getVaccinesApi(
 export async function createVaccineApi(
   data: CreateVaccineRequest
 ): Promise<VaccineResponse> {
-  const res = await api.post(`/vaccine`, data);
+  const res = await api.post(`/api/vaccine`, data);
   return res.data;
 }

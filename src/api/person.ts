@@ -20,7 +20,7 @@ export async function getPaginatedPersonsApi(
   pageNumber = 1,
   pageSize = 10
 ): Promise<PaginatedResult<PaginatedPersonResponse>> {
-  const res = await api.get(`/person`, {
+  const res = await api.get(`/api/person`, {
     params: { pageNumber, pageSize },
   });
   return res.data;
@@ -29,16 +29,16 @@ export async function getPaginatedPersonsApi(
 export async function createPersonApi(
   data: CreatePersonRequest
 ): Promise<PersonResponse> {
-  const res = await api.post(`/person`, data);
+  const res = await api.post(`/api/person`, data);
   return res.data;
 }
 
 export async function getPersonByIdApi(id: string): Promise<PersonResponse> {
-  const res = await api.get(`/person/${id}`);
+  const res = await api.get(`/api/person/${id}`);
   return res.data;
 }
 
 export async function deletePersonByIdApi(id: string): Promise<void> {
-  const res = await api.delete(`/person/${id}`);
+  const res = await api.delete(`/api/person/${id}`);
   return res.data;
 }
