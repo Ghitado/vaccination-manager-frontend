@@ -19,7 +19,7 @@ export default function VaccineTable({
     <TableContainer
       component={Paper}
       variant="outlined"
-      sx={{ maxHeight: 440 }}
+      sx={{ maxHeight: 300 }}
     >
       <Table
         stickyHeader

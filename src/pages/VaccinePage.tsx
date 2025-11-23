@@ -1,4 +1,11 @@
-import { Button, Paper, Stack, TextField, Typography } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import {
+  InputAdornment,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import {
   createVaccineApi,
@@ -6,68 +13,86 @@ import {
   type VaccineResponse,
 } from "../api/vaccine";
 import CustomPagination from "../components/CustomPagination";
+import CreateVaccineForm from "../components/vaccines/CreateVaccineForm";
 import VaccineTable from "../components/vaccines/VaccineTable";
+import { useFeedback } from "../contexts/FeedbackContext";
 
 export default function VaccinePage() {
-  const [vaccines, setVaccines] = useState<VaccineResponse[]>([]);
-  const [name, setName] = useState("");
+  const [allVaccines, setAllVaccines] = useState<VaccineResponse[]>([]);
+  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
-  const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const { showFeedback } = useFeedback();
 
-  const reload = async (p = page) => {
-    const res = await getVaccinesApi(p, pageSize);
-    setVaccines(res.items);
-    setTotalPages(Math.ceil(res.totalCount / res.pageSize));
+  const execute = async (action: () => Promise<void>, errorMsg: string) => {
+    try {
+      await action();
+    } catch (e) {
+      console.error(e);
+      showFeedback(errorMsg, "error");
+    }
   };
+
+  const reload = () =>
+    execute(async () => {
+      const res = await getVaccinesApi(1, 100);
+      setAllVaccines(res.items);
+    }, "Erro ao carregar vacinas.");
+
+  useEffect(() => {
+    reload();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const filtered = allVaccines.filter((v) =>
+    v.name.toLowerCase().includes(search.toLowerCase())
+  );
+  const paginated = filtered.slice((page - 1) * pageSize, page * pageSize);
+  const totalPages = Math.ceil(filtered.length / pageSize) || 1;
 
   useEffect(() => {
     (async () => {
-      reload();
+      setPage(1);
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, pageSize]);
+  }, [search, pageSize]);
 
-  const handleCreate = async (e?: React.FormEvent) => {
-    e?.preventDefault();
-    if (!name.trim()) return;
-    setLoading(true);
-
-    await createVaccineApi({ name })
-      .then(() => {
-        setName("");
-        reload(page);
-      })
-      .finally(() => setLoading(false));
-  };
+  const handleCreate = (name: string) =>
+    execute(async () => {
+      await createVaccineApi({ name });
+      showFeedback("Vacina cadastrada!", "success");
+      reload();
+    }, "Erro ao cadastrar.");
 
   return (
     <Paper elevation={3} sx={{ p: 4, maxWidth: "100%", minHeight: 500 }}>
       <Stack spacing={3}>
-        <Typography variant="h5">Gerenciar Vacinas</Typography>
-
         <Stack
-          component="form"
-          direction="row"
+          direction={{ xs: "column", sm: "row" }}
+          justifyContent="space-between"
+          alignItems="center"
           spacing={2}
-          onSubmit={handleCreate}
         >
+          <Typography variant="h5">Gerenciar Vacinas</Typography>
           <TextField
-            label="Nome da Vacina"
-            variant="filled"
+            placeholder="Pesquisar..."
             size="small"
-            fullWidth
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            disabled={loading}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon color="action" />
+                  </InputAdornment>
+                ),
+              },
+            }}
+            sx={{ width: { xs: "100%", sm: 300 } }}
           />
-          <Button type="submit" variant="contained" disabled={loading}>
-            Adicionar
-          </Button>
         </Stack>
 
-        <VaccineTable vaccines={vaccines} />
+        <CreateVaccineForm onCreate={handleCreate} />
+        <VaccineTable vaccines={paginated} />
 
         <CustomPagination
           page={page}
