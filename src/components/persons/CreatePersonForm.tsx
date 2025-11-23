@@ -31,7 +31,11 @@ export default function CreatePersonForm({ onCreate }: CreatePersonFormProps) {
         onChange={(e) => setName(e.target.value)}
         disabled={loading}
       />
-      <Button type="submit" variant="contained" disabled={loading}>
+      <Button
+        type="submit"
+        variant="contained"
+        disabled={loading || !name.trim()}
+      >
         Adicionar
       </Button>
     </Stack>

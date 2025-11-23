@@ -42,34 +42,42 @@ export default function PersonTable({
         </TableHead>
 
         <TableBody>
-          {persons.map((p) => (
-            <TableRow key={p.id} hover>
-              <TableCell>
-                <ScrollableText maxWidth={"50vh"}>{p.name}</ScrollableText>
-              </TableCell>
+          {persons.length > 0 ? (
+            persons.map((p) => (
+              <TableRow key={p.id} hover>
+                <TableCell>
+                  <ScrollableText maxWidth={"50vh"}>{p.name}</ScrollableText>
+                </TableCell>
 
-              <TableCell>
-                <Stack direction="row" spacing={1}>
-                  <Button
-                    variant="outlined"
-                    color="info"
-                    size="small"
-                    onClick={() => onOpenCard(p.id)}
-                  >
-                    Ver Cartão
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    size="small"
-                    onClick={() => onDelete(p.id)}
-                  >
-                    Excluir
-                  </Button>
-                </Stack>
+                <TableCell>
+                  <Stack direction="row" spacing={1}>
+                    <Button
+                      variant="outlined"
+                      color="info"
+                      size="small"
+                      onClick={() => onOpenCard(p.id)}
+                    >
+                      Ver Cartão
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      size="small"
+                      onClick={() => onDelete(p.id)}
+                    >
+                      Excluir
+                    </Button>
+                  </Stack>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell align="center" sx={{ py: 3, color: "text.secondary" }}>
+                Nenhuma pessoa cadastrada.
               </TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
     </TableContainer>

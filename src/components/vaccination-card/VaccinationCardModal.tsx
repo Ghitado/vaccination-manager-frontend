@@ -16,6 +16,8 @@ import {
   createVaccinationRecordApi,
   deleteVaccinationRecordApi,
 } from "../../api/vaccinationRecord";
+import { useFeedback } from "../../contexts/FeedbackContext";
+import CustomPagination from "../CustomPagination";
 import ScrollableText from "../ScrollableText";
 import VaccinationForm from "./VaccinationForm";
 import VaccinationHistory from "./VaccinationHistory";
@@ -36,42 +38,60 @@ export default function VaccinationCardModal({
   const [person, setPerson] = useState<PersonResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const { showFeedback } = useFeedback();
+
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
 
   useEffect(() => {
     if (open && personId) {
-      const load = () => {
-        setLoading(true);
-        getPersonByIdApi(personId)
-          .then(setPerson)
-          .finally(() => setLoading(false));
-      };
-      load();
+      setLoading(true);
+      getPersonByIdApi(personId)
+        .then(setPerson)
+        .catch(() => showFeedback("Erro ao carregar.", "error"))
+        .finally(() => setLoading(false));
+
+      setPage(1);
     } else {
-      (async () => {
-        setPerson(null);
-      })();
+      setPerson(null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, personId]);
 
+  const refresh = () => getPersonByIdApi(person!.id).then(setPerson);
+
   const handleAdd = async (vaccineId: string, date: string, dose: number) => {
-    if (!person) return;
     setSaving(true);
-    return createVaccinationRecordApi({
-      personId: person.id,
+    createVaccinationRecordApi({
+      personId: person!.id,
       vaccineId,
       appliedAt: date,
       dose,
     })
-      .then(() => getPersonByIdApi(person.id).then(setPerson))
+      .then(() => {
+        refresh();
+        showFeedback("Vacina registrada!", "success");
+      })
+      .catch(() => showFeedback("Erro ao registrar.", "error"))
       .finally(() => setSaving(false));
   };
 
   const handleDelete = (recordId: string) => {
-    if (!person || !confirm("Remover registro?")) return;
-    deleteVaccinationRecordApi(recordId).then(() =>
-      getPersonByIdApi(person.id).then(setPerson)
-    );
+    if (!confirm("Remover registro?")) return;
+    deleteVaccinationRecordApi(recordId)
+      .then(() => {
+        refresh();
+        showFeedback("Registro removido.", "success");
+      })
+      .catch(() => showFeedback("Erro ao remover.", "error"));
   };
+
+  const allRecords = person?.vaccinationRecords || [];
+  const totalPages = Math.ceil(allRecords.length / pageSize) || 1;
+  const paginatedRecords = allRecords.slice(
+    (page - 1) * pageSize,
+    page * pageSize
+  );
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
@@ -109,10 +129,22 @@ export default function VaccinationCardModal({
             <CircularProgress />
           </Stack>
         ) : (
-          <VaccinationHistory
-            records={person?.vaccinationRecords || []}
-            onDelete={handleDelete}
-          />
+          <>
+            <VaccinationHistory
+              records={paginatedRecords}
+              onDelete={handleDelete}
+            />
+
+            {allRecords.length > 0 && (
+              <CustomPagination
+                page={page}
+                totalPages={totalPages}
+                pageSize={pageSize}
+                onChangePage={setPage}
+                onPageSizeChange={setPageSize}
+              />
+            )}
+          </>
         )}
       </DialogContent>
 

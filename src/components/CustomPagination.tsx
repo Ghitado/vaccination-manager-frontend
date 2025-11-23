@@ -16,7 +16,7 @@ export default function CustomPagination({
   onPageSizeChange,
 }: CustomPaginationProps) {
   const handleToggleSize = () => {
-    const nextSize = pageSize === 5 ? 10 : 5;
+    const nextSize = pageSize >= 100 ? 10 : 100;
     onPageSizeChange(nextSize);
   };
 
@@ -29,6 +29,7 @@ export default function CustomPagination({
         color="primary"
         showFirstButton
         showLastButton
+        sx={{ opacity: totalPages <= 1 ? 0.5 : 1 }}
       />
 
       <Button
@@ -40,7 +41,9 @@ export default function CustomPagination({
           fontSize: "0.75rem",
         }}
       >
-        Itens por página: <strong>{pageSize}</strong>
+        {pageSize >= 100
+          ? "Voltar para paginação (10)"
+          : "Ver todos nesta lista (100)"}
       </Button>
     </Stack>
   );
