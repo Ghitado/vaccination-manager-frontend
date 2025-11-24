@@ -150,13 +150,13 @@ src/
 
 Navigation is handled by **React Router DOM**, ensuring a smooth Single Page Application (SPA) experience. Routes are categorized as either public or protected via a `ProtectedRoute` guard.
 
-| Path       | Main Component | Description                                                                                  | Access  |
-| :--------- | :------------- | :------------------------------------------------------------------------------------------- | :-----: |
-| `/login`   | `LoginPage`    | Authentication screen ("Split Screen"). Redirects to the dashboard if a valid token exists.  | Public  |
-| `/`        | `Layout`       | Root route. Automatically redirects to `/pessoas` after login.                               | Private |
-| `/pessoas` | `PersonPage`   | Patient management dashboard. Includes listing, registration, and the **Vaccination Modal**. | Private |
-| `/vacinas` | `VaccinePage`  | Inventory management and available vaccine types.                                            | Private |
-| `*`        | `NotFound`     | Fallback for non-existent URLs (404 Error).                                                  | Public  |
+| Path        | Main Component | Description                                                                                  | Access  |
+| :---------- | :------------- | :------------------------------------------------------------------------------------------- | :-----: |
+| `/login`    | `LoginPage`    | Authentication screen ("Split Screen"). Redirects to the dashboard if a valid token exists.  | Public  |
+| `/`         | `Layout`       | Root route. Automatically redirects to `/persons` after login.                               | Private |
+| `/persons`  | `PersonPage`   | Patient management dashboard. Includes listing, registration, and the **Vaccination Modal**. | Private |
+| `/vaccines` | `VaccinePage`  | Inventory management and available vaccine types.                                            | Private |
+| `*`         | `NotFound`     | Fallback for non-existent URLs (404 Error).                                                  | Public  |
 
 ---
 
