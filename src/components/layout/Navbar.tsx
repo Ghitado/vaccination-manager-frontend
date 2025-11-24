@@ -15,10 +15,14 @@ import {
 } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { useLanguage } from "../../contexts/LanguageContext";
+import { LanguageSwitcher } from "../common/LanguageSwitcher";
 
 export default function Navbar() {
   const { pathname } = useLocation();
   const { isAuthenticated, logout } = useAuth();
+
+  const { texts } = useLanguage();
 
   const tabValue = pathname.startsWith("/vaccines") ? 1 : 0;
 
@@ -31,8 +35,10 @@ export default function Navbar() {
             Vaccination Manager
           </Typography>
 
+          <LanguageSwitcher />
+
           {isAuthenticated && (
-            <Tooltip title="Sair">
+            <Tooltip title={texts.nav.logout}>
               <IconButton color="inherit" onClick={logout}>
                 <LogoutIcon />
               </IconButton>
@@ -51,13 +57,13 @@ export default function Navbar() {
               >
                 <Tab
                   icon={<PeopleIcon />}
-                  label="Pessoas"
+                  label={texts.nav.patients}
                   component={Link}
                   to="/persons"
                 />
                 <Tab
                   icon={<MedicationIcon />}
-                  label="Vacinas"
+                  label={texts.nav.vaccines}
                   component={Link}
                   to="/vaccines"
                 />
