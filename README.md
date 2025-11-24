@@ -69,6 +69,10 @@ It enables patient registration, vaccine inventory management, and the recording
 - **Dual Language Support:** Native support for **English (EN)** and **Portuguese (PT-BR)**.
 - **Instant Toggle:** Users can switch languages instantly without reloading the page, persisting their preference via LocalStorage.
 
+### Server Warm-up (Cold Start)
+
+- **User-Friendly Waiting:** Since the backend is on a free tier, it "sleeps" after inactivity. I added a dedicated modal that keeps the user informed while the server wakes up, instead of showing a generic error.
+
 ---
 
 ## How to Run
@@ -187,6 +191,10 @@ I centralized all API calls in the `src/api` folder. This keeps the code clean a
 ### 6. Internationalization Strategy
 
 I avoided heavy libraries like `react-i18next` intentionally. I implemented a lightweight, type-safe translation system using **React Context**. This approach reduces the final bundle size and proves that complex features can be solved with native tools when the scope allows.
+
+### 7. Handling Server "Cold Starts"
+
+Since the backend runs on a free tier, it goes to sleep when idle. I implemented a specific check that keeps the user on a waiting screen while the server is **spinning up**. This prevents random connection errors and ensures the app only loads when the API is actually ready.
 
 ---
 
