@@ -1,162 +1,195 @@
 # Vaccination Manager Frontend
 
-This is the front-end application for the Vaccination Manager system. It allows you to manage people, vaccines, and vaccination records via a REST API.
+This repository houses the frontend interface for the **"Vaccination Manager"** technical challenge.
+It is a modern Single Page Application (SPA) built with **React 19**, **TypeScript**, and **Vite**, designed to interact securely and efficiently with a .NET backend.
+
+The project prioritizes a smooth User Experience (UX), clean code, and a component-based architecture.
+
+---
 
 ## Table of Contents
 
-1. [Overview](#overview)
-2. [Tech Stack](#tech-stack)
-3. [Project Structure](#project-structure)
-4. [Getting Started](#getting-started)
-   - [Prerequisites](#prerequisites)
-   - [Installation](#installation)
-   - [Running the App](#running-the-app)
-5. [Usage](#usage)
-   - [Pages and Features](#pages-and-features)
-   - [API Integration](#api-integration)
-6. [Routing & API Endpoints](#routing--api-endpoints)
-7. [Architecture & Design Decisions](#architecture--design-decisions)
-8. [Future Improvements](#future-improvements)
-9. [License](#license)
+- [Overview](#overview)
+- [Tech Stack](#tech-stack)
+- [Features](#features)
+- [How to Run](#how-to-run)
+- [Project Structure](#project-structure)
+- [Application Routes](#application-routes)
+- [Architectural Decisions](#architectural-decisions)
+- [Author](#author)
 
 ---
 
 ## Overview
 
-This frontend provides a user interface for interacting with the Vaccination Manager backend. Users can:
-
-- Create and delete people
-- List people with pagination
-- Register vaccination records (person, vaccine, date, dose)
-- View vaccination records associated with a person
+The frontend provides a unified dashboard to manage the entire vaccination ecosystem.
+It enables patient registration, vaccine inventory management, and the recording of administered doses directly onto the patient's digital card—all with real-time visual feedback.
 
 ---
 
 ## Tech Stack
 
-- React
-- TypeScript
-- Material-UI (MUI)
-- Axios (for API calls)
-- React State Hooks (`useState`, `useEffect`)
+- **Core:** React 19, TypeScript, Vite
+- **Roteamento:** React Router DOM v7
+- **UI Framework:** Material UI (MUI)
+- **Cliente HTTP:** Axios (com Interceptors para Refresh Token)
+- **Gerenciamento de Estado:** React Context API (Auth & Feedback)
+- **Validação:** Zod (Schema Validation)
+- **Autenticação:** JWT com Refresh Token (via js-cookie)
+- **Ícones:** MUI Icons Material
+- **Internationalization:** Custom React Context (No external libs)
 
 ---
 
-## Project Structure
+## Features
 
-```bash
-src/
-├─ api/ # API client modules
-│ ├─ person.ts
-│ ├─ vaccine.ts
-│ └─ vaccinationRecord.ts
-├─ components/ # Reusable UI components
-│ ├─ CopyButton.tsx
-│ └─ ScrollableText.tsx
-├─ pages/ # Page-level components
-│ ├─ PersonPage.tsx
-│ ├─ VaccinePage.tsx
-│ └─ VaccinationRecordPage.tsx
-├─ App.tsx # Main app layout and routing
-└─ index.tsx # React entry point
-```
+### Authentication & Security
+
+- **Login & Registration:** Professional "Split Screen" layout with instant visual validation.
+- **Protected Routes:** Automatically redirects unauthenticated users to the login page.
+- **Silent Refresh:** Automatically renews access tokens in the background upon expiration, without logging the user out.
+- **Logout:** Securely clears cookies and redirects the user.
+
+### Person Management (Patients)
+
+- **Smart Listing:** Loads data in batches (100 items) to enable instant client-side search and pagination, minimizing server requests.
+- **CRUD:** Create and delete operations with visual feedback (Toast notifications).
+- **Vaccination Card (Smart Modal):**
+  - _Visualization:_ Complete vaccination history grouped by date.
+  - _Quick Action:_ Register new doses directly within the modal using Autocomplete.
+  - _Validation:_ Prevents future dates and invalid entries.
+
+### Vaccine Management
+
+- **Inventory Control:** Register and view available vaccines.
+- **Integrated Search:** Uses the same local filtering logic for quick lookups.
+
+### Internationalization (i18n)
+
+- **Dual Language Support:** Native support for **English (EN)** and **Portuguese (PT-BR)**.
+- **Instant Toggle:** Users can switch languages instantly without reloading the page, persisting their preference via LocalStorage.
 
 ---
 
-## Getting Started
+## How to Run
 
 ### Prerequisites
 
-- Node.js (v14+ recommended)
-- Yarn or npm
+- Node.js (v18 or higher)
+- The Backend API running locally or in the cloud
 
 ### Installation
 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/Ghitado/vaccination-manager-frontend.git
+git clone [https://github.com/Ghitado/vaccination-manager-frontend.git](https://github.com/Ghitado/vaccination-manager-frontend.git)
 cd vaccination-manager-frontend
 ```
 
-2. Install dependencies:
+### Install dependencies:
 
 ```bash
 npm install
-# or
-yarn
 ```
 
-### Running the App
+### Environment Setup
+
+Create a `.env` file in the root directory to define the API URL. The backend defaults to `https://localhost:5001`.
 
 ```bash
-npm start
-# or
-yarn start
+VITE_API_URL=https://localhost:5001
 ```
 
-This will start the development server. Open http://localhost:5173 (or the port shown in your terminal) to access the app.
+### Running
 
-## Usage
-
-### Pages and Features
-
-- Person Page: add a person, list persons, delete a person.
-
-- Vaccine Page: list vaccines (you probably have similar create/list operations here).
-
-- Vaccination Record Page: create a new vaccination record by entering a person ID, a vaccine ID, date, and dose.
-
-## API Integration
-
-All API calls are done via Axios in src/api/.
-For example, to create a person:
+Start the development server:
 
 ```bash
-import { createPersonApi } from "../api/person";
-
-await createPersonApi({ name: "John Doe" });
+npm run dev
 ```
 
-## Routing & API Endpoints
+Visit:
 
-Here are the main API endpoints used by this frontend:
+```bash
+http://localhost:5173
+```
 
-Feature API Route Method Description
-Get paginated persons GET `/api/person` pageNumber, pageSize query params Returns a PaginatedResult with id and name of persons.
-Create person POST `/api/person` Body: `{ name: string }` Creates a new person, returns PersonResponse.
-Delete person DELETE `/api/person/{id}` - Deletes a person by ID.
-Create vaccination record POST `/api/vaccinationrecord` Body: `{ personId, vaccineId, appliedAt, dose }` Creates a new vaccination record.
-Get person by ID with vaccination records GET `/api/person/{id}` - Returns full PersonResponse, including vaccinationRecords.
+---
 
-## Architecture & Design Decisions
+## Project Structure
 
-- State Management: The project uses React state hooks (useState, useEffect) rather than a more complex library (like Redux) because the state requirements are simple.
+The architecture follows a **Feature-First** pattern with a clear **Separation of Concerns**:
 
-- UI Framework: Material-UI (MUI) is used for quick, consistent styling and layout.
+```bash
+src/
+├── api/                # Axios setup and service calls
+│   ├── client.ts       # Request/Response Interceptors and Refresh Token
+│   └── ...
+├── components/
+│   ├── common/         # Shared components (LanguageSwitcher, Pagination)
+│   ├── auth/           # Login components
+│   ├── layout/         # Global structure (Navbar)
+│   ├── persons/        # Person-specific components
+│   ├── vaccination-card/ # Complex logic for the Vaccination Modal
+│   │   ├── VaccinationCardModal.tsx  # Orchestrator
+│   │   ├── VaccinationForm.tsx       # Zod-validated form
+│   │   └── VaccinationHistory.tsx    # History table
+│   └── vaccines/
+├── constants/          # Static Data & Dictionaries (translations.ts)
+├── contexts/           # Global State (Auth, Feedback, Language)
+├── pages/              # Main screens (LoginPage, PersonPage, VaccinePage)
+├── routes/             # Route configuration (AppRoutes, ProtectedRoute)
+├── App.tsx             # App Shell
+└── main.tsx            # Entry point
+```
 
-- API Client: Axios is used for HTTP requests. The API layer is abstracted in src/api/ for maintainability.
+---
 
-- Responsiveness: Layout is built with MUI Grid and Stack to support responsive design.
+## Application Routes
 
-- Conciseness & Readability: The UI focuses on functionality, avoiding unnecessary complexity.
+Navigation is handled by **React Router DOM**, ensuring a smooth Single Page Application (SPA) experience. Routes are categorized as either public or protected via a `ProtectedRoute` guard.
 
-- Error Handling: Basic checks are done (for example, not submitting the form if required fields are empty). More robust error handling could be added later.
+| Path       | Main Component | Description                                                                                  | Access  |
+| :--------- | :------------- | :------------------------------------------------------------------------------------------- | :-----: |
+| `/login`   | `LoginPage`    | Authentication screen ("Split Screen"). Redirects to the dashboard if a valid token exists.  | Public  |
+| `/`        | `Layout`       | Root route. Automatically redirects to `/pessoas` after login.                               | Private |
+| `/pessoas` | `PersonPage`   | Patient management dashboard. Includes listing, registration, and the **Vaccination Modal**. | Private |
+| `/vacinas` | `VaccinePage`  | Inventory management and available vaccine types.                                            | Private |
+| `*`        | `NotFound`     | Fallback for non-existent URLs (404 Error).                                                  | Public  |
 
-## Future Improvements
+---
 
-- Validation: Add form validation (e.g., verify correct GUID format, valid date, etc.).
+## Architectural Decisions
 
-- User Feedback: Show notification or toast messages after create/delete operations.
+The goal here was balance: delivering clean, functional code (MVP) without **over-engineering**.
 
-- View Details: Replace alert with a modal on “View Person” to show vaccination records.
+### 1. Cookies & Security
 
-- Search & Filter: Enable searching or filtering people and vaccination records.
+I chose `js-cookie` to manage JWTs. While I acknowledge that **HttpOnly Cookies** are the gold standard against XSS, handling them client-side allowed for a faster implementation of the _Refresh Token_ flow and login persistence without requiring complex CORS/Proxy configurations on the backend at this stage.
 
-- Authentication: Add login/auth (JWT or OAuth) to secure the API.
+### 2. Forms (Simplicity vs. Libraries)
 
-- Testing: Add unit tests (React Testing Library) or integration tests.
+For forms, I stuck to standard `useState`. Since screens have very few fields, using a heavy library like _React Hook Form_ would be **overkill** right now. However, the structure is clean enough to easily migrate for rendering performance if the project scales.
+
+### 3. State Management
+
+No Redux or Zustand. React's native **Context API** perfectly handles sharing user sessions (Auth) and visual feedback (Toasts) across the app, avoiding unnecessary boilerplate.
+
+### 4. UI (MUI)
+
+Choosing **Material-UI (MUI)** was a strategic move for development speed. I leveraged Grid and Stack components to ensure responsiveness and a polished look "out-of-the-box," avoiding the need for manual CSS layouting.
+
+### 5. Error Handling
+
+I centralized all API calls in the `src/api` folder. This keeps the code clean and makes it easy to add global error handling or retry policies in the future. On the UI, the focus was preventive: validating fields before the user even tries to submit.
+
+### 6. Internationalization Strategy
+
+I avoided heavy libraries like `react-i18next` intentionally. I implemented a lightweight, type-safe translation system using **React Context**. This approach reduces the final bundle size and proves that complex features can be solved with native tools when the scope allows.
+
+---
 
 ## Author
 
-By Thiago de Melo Mota. Implementation prepared as part of a technical challenge submission.
+Developed by **Thiago de Melo Mota** as part of a technical challenge.
