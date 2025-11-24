@@ -1,5 +1,6 @@
 import { Autocomplete, Button, Grid, TextField } from "@mui/material";
 import { useState } from "react";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 type Props = {
   vaccineOptions: { id: string; name: string }[];
@@ -12,6 +13,8 @@ export default function VaccinationForm({
   onAdd,
   loading,
 }: Props) {
+  const { texts } = useLanguage();
+
   const [vaccineId, setVaccineId] = useState<string | null>(null);
   const [date, setDate] = useState("");
   const [dose, setDose] = useState(1);
@@ -57,10 +60,12 @@ export default function VaccinationForm({
           renderInput={(params) => (
             <TextField
               {...params}
-              label="Vacina"
+              label={texts.vaccinationCard.form.vaccineLabel}
               size="small"
               error={errors.vaccineId}
-              helperText={errors.vaccineId ? "Obrigatório" : ""}
+              helperText={
+                errors.vaccineId ? texts.vaccinationCard.form.required : ""
+              }
             />
           )}
         />
@@ -71,16 +76,18 @@ export default function VaccinationForm({
           type="date"
           size="small"
           fullWidth
-          label="Data"
+          label={texts.vaccinationCard.form.dateLabel}
           slotProps={{ inputLabel: { shrink: true } }}
-          inputProps={{ max: new Date().toISOString().split("T")[0] }}
+          inputProps={{
+            max: new Date().toISOString().split("T")[0],
+          }}
           value={date}
           onChange={(e) => {
             setDate(e.target.value);
             setErrors((prev) => ({ ...prev, date: false }));
           }}
           error={errors.date}
-          helperText={errors.date ? "Obrigatório" : ""}
+          helperText={errors.date ? texts.vaccinationCard.form.required : ""}
         />
       </Grid>
 
@@ -89,14 +96,14 @@ export default function VaccinationForm({
           type="number"
           size="small"
           fullWidth
-          label="Dose"
+          label={texts.vaccinationCard.form.doseLabel}
           value={dose}
           onChange={(e) => {
             setDose(Number(e.target.value));
             setErrors((prev) => ({ ...prev, dose: false }));
           }}
           error={errors.dose}
-          helperText={errors.dose ? "Dose deve ser maior que 0" : ""}
+          helperText={errors.dose ? texts.vaccinationCard.form.invalidDose : ""}
         />
       </Grid>
 
@@ -108,7 +115,7 @@ export default function VaccinationForm({
           onClick={handleSubmit}
           loading={loading}
         >
-          Aplicar
+          {texts.vaccinationCard.form.submit}
         </Button>
       </Grid>
     </Grid>

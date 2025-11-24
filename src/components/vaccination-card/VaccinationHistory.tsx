@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@mui/material";
 import type { VaccinationRecordResponse } from "../../api/vaccinationRecord";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 type Props = {
   records: VaccinationRecordResponse[];
@@ -16,13 +17,15 @@ type Props = {
 };
 
 export default function VaccinationHistory({ records, onDelete }: Props) {
+  const { texts, language } = useLanguage();
+
   if (!records || records.length === 0) {
     return (
       <Paper
         variant="outlined"
         sx={{ p: 4, textAlign: "center", color: "text.secondary" }}
       >
-        Nenhum registro encontrado.
+        {texts.vaccinationCard.history.empty}
       </Paper>
     );
   }
@@ -32,9 +35,11 @@ export default function VaccinationHistory({ records, onDelete }: Props) {
       <Table size="small">
         <TableHead>
           <TableRow sx={{ bgcolor: "#eee" }}>
-            <TableCell>Vacina</TableCell>
-            <TableCell>Detalhes</TableCell>
-            <TableCell align="right">Ações</TableCell>
+            <TableCell>{texts.vaccinationCard.history.table.vaccine}</TableCell>
+            <TableCell>{texts.vaccinationCard.history.table.details}</TableCell>
+            <TableCell align="right">
+              {texts.vaccinationCard.history.table.actions}
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -44,8 +49,13 @@ export default function VaccinationHistory({ records, onDelete }: Props) {
                 {rec.vaccineName}
               </TableCell>
               <TableCell>
-                {new Date(rec.appliedAt).toLocaleDateString("pt-BR")} •{" "}
-                {rec.dose}ª Dose
+                {new Date(rec.appliedAt).toLocaleDateString(
+                  language === "pt" ? "pt-BR" : "en-US"
+                )}{" "}
+                •{" "}
+                {language === "pt"
+                  ? `${rec.dose}ª ${texts.vaccinationCard.history.dose}`
+                  : `${texts.vaccinationCard.history.dose} ${rec.dose}`}
               </TableCell>
               <TableCell align="right">
                 <Button
@@ -53,7 +63,7 @@ export default function VaccinationHistory({ records, onDelete }: Props) {
                   color="error"
                   onClick={() => onDelete(rec.id)}
                 >
-                  Remover
+                  {texts.vaccinationCard.history.remove}
                 </Button>
               </TableCell>
             </TableRow>

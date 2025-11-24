@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@mui/material";
 import type { VaccineResponse } from "../../api/vaccine";
+import { useLanguage } from "../../contexts/LanguageContext";
 import ScrollableText from "../ScrollableText";
 
 export default function VaccineTable({
@@ -15,6 +16,8 @@ export default function VaccineTable({
 }: {
   vaccines: VaccineResponse[];
 }) {
+  const { texts } = useLanguage();
+
   return (
     <TableContainer
       component={Paper}
@@ -28,7 +31,9 @@ export default function VaccineTable({
       >
         <TableHead>
           <TableRow>
-            <TableCell sx={{ width: "100%" }}>Nome da Vacina</TableCell>
+            <TableCell sx={{ width: "100%" }}>
+              {texts.vaccines.table.name}
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -36,16 +41,14 @@ export default function VaccineTable({
             vaccines.map((v) => (
               <TableRow key={v.id} hover>
                 <TableCell>
-                  <ScrollableText maxWidth="100%">
-                    <ScrollableText maxWidth={"50vh"}>{v.name}</ScrollableText>
-                  </ScrollableText>
+                  <ScrollableText maxWidth={"50vh"}>{v.name}</ScrollableText>
                 </TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
               <TableCell align="center" sx={{ py: 3, color: "text.secondary" }}>
-                Nenhuma vacina cadastrada.
+                {texts.vaccines.table.empty}
               </TableCell>
             </TableRow>
           )}

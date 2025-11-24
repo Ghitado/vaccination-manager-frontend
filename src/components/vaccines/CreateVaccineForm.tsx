@@ -1,5 +1,6 @@
 import { Button, Stack, TextField } from "@mui/material";
 import { useState } from "react";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 interface CreateVaccineFormProps {
   onCreate: (name: string) => Promise<void>;
@@ -8,6 +9,8 @@ interface CreateVaccineFormProps {
 export default function CreateVaccineForm({
   onCreate,
 }: CreateVaccineFormProps) {
+  const { texts } = useLanguage();
+
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -25,7 +28,7 @@ export default function CreateVaccineForm({
   return (
     <Stack component="form" direction="row" spacing={2} onSubmit={handleSubmit}>
       <TextField
-        label="Nome da Vacina"
+        label={texts.vaccines.form.nameLabel}
         variant="filled"
         size="small"
         fullWidth
@@ -39,7 +42,7 @@ export default function CreateVaccineForm({
         variant="contained"
         disabled={loading || !name.trim()}
       >
-        Adicionar
+        {texts.vaccines.form.submit}
       </Button>
     </Stack>
   );

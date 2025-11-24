@@ -1,4 +1,5 @@
 import { Button, Pagination, Stack } from "@mui/material";
+import { useLanguage } from "../contexts/LanguageContext";
 
 type CustomPaginationProps = {
   page: number;
@@ -15,6 +16,8 @@ export default function CustomPagination({
   onChangePage,
   onPageSizeChange,
 }: CustomPaginationProps) {
+  const { texts } = useLanguage();
+
   const handleToggleSize = () => {
     const nextSize = pageSize >= 100 ? 10 : 100;
     onPageSizeChange(nextSize);
@@ -42,8 +45,8 @@ export default function CustomPagination({
         }}
       >
         {pageSize >= 100
-          ? "Voltar para paginação (10)"
-          : "Ver todos nesta lista (100)"}
+          ? texts.common.pagination.showPaged
+          : texts.common.pagination.showAll}
       </Button>
     </Stack>
   );

@@ -8,6 +8,9 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 
+// 1. IMPORTE O HOOK
+import { useLanguage } from "../contexts/LanguageContext";
+
 import {
   createPersonApi,
   deletePersonByIdApi,
@@ -23,6 +26,8 @@ import VaccinationCardModal from "../components/vaccination-card/VaccinationCard
 import { useFeedback } from "../contexts/FeedbackContext";
 
 export default function PersonPage() {
+  const { texts } = useLanguage();
+
   const [persons, setPersons] = useState<PaginatedPersonResponse[]>([]);
   const [vaccineOptions, setVaccineOptions] = useState<
     { id: string; name: string }[]
@@ -52,7 +57,7 @@ export default function PersonPage() {
       ]);
       setPersons(pRes.items);
       setVaccineOptions(vRes.items);
-    }, "Erro ao carregar dados.");
+    }, texts.persons.feedback.errorLoad);
 
   useEffect(() => {
     reload();
@@ -74,17 +79,17 @@ export default function PersonPage() {
   const handleCreate = (name: string) =>
     execute(async () => {
       await createPersonApi({ name });
-      showFeedback("Pessoa cadastrada!", "success");
+      showFeedback(texts.persons.feedback.created, "success");
       reload();
-    }, "Erro ao cadastrar.");
+    }, texts.persons.feedback.errorCreate);
 
   const handleDelete = (id: string) => {
-    if (!confirm("Apagar histórico desta pessoa?")) return;
+    if (!confirm(texts.persons.feedback.confirmDelete)) return;
     execute(async () => {
       await deletePersonByIdApi(id);
-      showFeedback("Pessoa removida.", "success");
+      showFeedback(texts.persons.feedback.deleted, "success");
       reload();
-    }, "Erro ao remover.");
+    }, texts.persons.feedback.errorDelete);
   };
 
   return (
@@ -96,10 +101,10 @@ export default function PersonPage() {
           alignItems="center"
           spacing={2}
         >
-          <Typography variant="h5">Gerenciar Pessoas</Typography>
+          <Typography variant="h5">{texts.persons.title}</Typography>
 
           <TextField
-            placeholder="Pesquisar..."
+            placeholder={texts.persons.search}
             size="small"
             value={search}
             onChange={(e) => setSearch(e.target.value)}

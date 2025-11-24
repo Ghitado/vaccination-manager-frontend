@@ -1,11 +1,14 @@
 import { Button, Stack, TextField } from "@mui/material";
 import { useState } from "react";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 interface CreatePersonFormProps {
   onCreate: (name: string) => Promise<void>;
 }
 
 export default function CreatePersonForm({ onCreate }: CreatePersonFormProps) {
+  const { texts } = useLanguage();
+
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -23,7 +26,7 @@ export default function CreatePersonForm({ onCreate }: CreatePersonFormProps) {
   return (
     <Stack component="form" direction="row" spacing={2} onSubmit={handleSubmit}>
       <TextField
-        label="Nome da Pessoa"
+        label={texts.persons.form.nameLabel}
         variant="filled"
         size="small"
         fullWidth
@@ -36,7 +39,7 @@ export default function CreatePersonForm({ onCreate }: CreatePersonFormProps) {
         variant="contained"
         disabled={loading || !name.trim()}
       >
-        Adicionar
+        {texts.persons.form.submit}
       </Button>
     </Stack>
   );

@@ -7,6 +7,8 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useLanguage } from "../contexts/LanguageContext";
+
 import {
   createVaccineApi,
   getVaccinesApi,
@@ -18,6 +20,8 @@ import VaccineTable from "../components/vaccines/VaccineTable";
 import { useFeedback } from "../contexts/FeedbackContext";
 
 export default function VaccinePage() {
+  const { texts } = useLanguage();
+
   const [allVaccines, setAllVaccines] = useState<VaccineResponse[]>([]);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -37,7 +41,7 @@ export default function VaccinePage() {
     execute(async () => {
       const res = await getVaccinesApi(1, 100);
       setAllVaccines(res.items);
-    }, "Erro ao carregar vacinas.");
+    }, texts.vaccines.feedback.loadError);
 
   useEffect(() => {
     reload();
@@ -59,9 +63,9 @@ export default function VaccinePage() {
   const handleCreate = (name: string) =>
     execute(async () => {
       await createVaccineApi({ name });
-      showFeedback("Vacina cadastrada!", "success");
+      showFeedback(texts.vaccines.feedback.created, "success");
       reload();
-    }, "Erro ao cadastrar.");
+    }, texts.vaccines.feedback.createError);
 
   return (
     <Paper elevation={3} sx={{ p: 4, maxWidth: "100%", minHeight: 500 }}>
@@ -72,9 +76,10 @@ export default function VaccinePage() {
           alignItems="center"
           spacing={2}
         >
-          <Typography variant="h5">Gerenciar Vacinas</Typography>
+          <Typography variant="h5">{texts.vaccines.title}</Typography>
+
           <TextField
-            placeholder="Pesquisar..."
+            placeholder={texts.vaccines.search}
             size="small"
             value={search}
             onChange={(e) => setSearch(e.target.value)}

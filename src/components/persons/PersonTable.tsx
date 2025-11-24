@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@mui/material";
 import type { PaginatedPersonResponse } from "../../api/person";
+import { useLanguage } from "../../contexts/LanguageContext";
 import ScrollableText from "../ScrollableText";
 
 type PersonTableProps = {
@@ -23,6 +24,8 @@ export default function PersonTable({
   onDelete,
   onOpenCard,
 }: PersonTableProps) {
+  const { texts } = useLanguage();
+
   return (
     <TableContainer
       component={Paper}
@@ -36,8 +39,8 @@ export default function PersonTable({
       >
         <TableHead>
           <TableRow>
-            <TableCell width={"100%"}>Nome</TableCell>
-            <TableCell>Ações</TableCell>
+            <TableCell width={"100%"}>{texts.persons.table.name}</TableCell>
+            <TableCell>{texts.persons.table.actions}</TableCell>
           </TableRow>
         </TableHead>
 
@@ -57,7 +60,7 @@ export default function PersonTable({
                       size="small"
                       onClick={() => onOpenCard(p.id)}
                     >
-                      Ver Cartão
+                      {texts.persons.table.viewCard}
                     </Button>
                     <Button
                       variant="outlined"
@@ -65,7 +68,7 @@ export default function PersonTable({
                       size="small"
                       onClick={() => onDelete(p.id)}
                     >
-                      Excluir
+                      {texts.persons.table.delete}
                     </Button>
                   </Stack>
                 </TableCell>
@@ -74,7 +77,7 @@ export default function PersonTable({
           ) : (
             <TableRow>
               <TableCell align="center" sx={{ py: 3, color: "text.secondary" }}>
-                Nenhuma pessoa cadastrada.
+                {texts.persons.table.empty}
               </TableCell>
             </TableRow>
           )}

@@ -11,6 +11,8 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useLanguage } from "../../contexts/LanguageContext";
+
 import { getPersonByIdApi, type PersonResponse } from "../../api/person";
 import {
   createVaccinationRecordApi,
@@ -35,6 +37,8 @@ export default function VaccinationCardModal({
   vaccineOptions,
   onClose,
 }: Props) {
+  const { texts } = useLanguage();
+
   const [person, setPerson] = useState<PersonResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -48,7 +52,9 @@ export default function VaccinationCardModal({
       setLoading(true);
       getPersonByIdApi(personId)
         .then(setPerson)
-        .catch(() => showFeedback("Erro ao carregar.", "error"))
+        .catch(() =>
+          showFeedback(texts.vaccinationCard.feedback.loadError, "error")
+        )
         .finally(() => setLoading(false));
 
       setPage(1);
@@ -70,20 +76,24 @@ export default function VaccinationCardModal({
     })
       .then(() => {
         refresh();
-        showFeedback("Vacina registrada!", "success");
+        showFeedback(texts.vaccinationCard.feedback.successRegister, "success");
       })
-      .catch(() => showFeedback("Erro ao registrar.", "error"))
+      .catch(() =>
+        showFeedback(texts.vaccinationCard.feedback.errorRegister, "error")
+      )
       .finally(() => setSaving(false));
   };
 
   const handleDelete = (recordId: string) => {
-    if (!confirm("Remover registro?")) return;
+    if (!confirm(texts.vaccinationCard.main.confirmDelete)) return;
     deleteVaccinationRecordApi(recordId)
       .then(() => {
         refresh();
-        showFeedback("Registro removido.", "success");
+        showFeedback(texts.vaccinationCard.feedback.successDelete, "success");
       })
-      .catch(() => showFeedback("Erro ao remover.", "error"));
+      .catch(() =>
+        showFeedback(texts.vaccinationCard.feedback.errorDelete, "error")
+      );
   };
 
   const allRecords = person?.vaccinationRecords || [];
@@ -96,7 +106,7 @@ export default function VaccinationCardModal({
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle>
-        <Typography variant="h6">Cartão de Vacinação</Typography>
+        <Typography variant="h6">{texts.vaccinationCard.main.title}</Typography>
         <Typography variant="subtitle1" color="primary">
           <ScrollableText maxWidth="80%">
             {person?.name || "..."}
@@ -110,7 +120,7 @@ export default function VaccinationCardModal({
             variant="subtitle2"
             sx={{ mb: 2, color: "text.secondary" }}
           >
-            Registrar Vacina
+            {texts.vaccinationCard.main.registerTitle}
           </Typography>
           <VaccinationForm
             vaccineOptions={vaccineOptions}
@@ -121,7 +131,7 @@ export default function VaccinationCardModal({
 
         <Divider sx={{ mb: 2 }} />
         <Typography variant="h6" gutterBottom>
-          Histórico
+          {texts.vaccinationCard.main.historyTitle}
         </Typography>
 
         {loading ? (
@@ -149,7 +159,7 @@ export default function VaccinationCardModal({
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={onClose}>Fechar</Button>
+        <Button onClick={onClose}>{texts.vaccinationCard.main.close}</Button>
       </DialogActions>
     </Dialog>
   );

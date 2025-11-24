@@ -12,8 +12,11 @@ import { useNavigate } from "react-router-dom";
 import { authApi } from "../../api/client";
 import { useAuth } from "../../contexts/AuthContext";
 import { useFeedback } from "../../contexts/FeedbackContext";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 export default function LoginForm() {
+  const { texts } = useLanguage();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isRegister, setIsRegister] = useState(false);
@@ -34,7 +37,7 @@ export default function LoginForm() {
     if (!email.trim() || !password.trim()) {
       setEmailError(!email.trim());
       setPasswordError(!password.trim());
-      setApiError("Preencha todos os campos obrigatórios.");
+      setApiError(texts.auth.feedback.required);
       return;
     }
 
@@ -43,22 +46,22 @@ export default function LoginForm() {
     try {
       if (isRegister) {
         await authApi.register(email, password);
-        showFeedback("Conta criada! Faça login.", "success");
+        showFeedback(texts.auth.feedback.created, "success");
         setIsRegister(false);
         setEmail("");
         setPassword("");
       } else {
         await authApi.login(email, password);
         login();
-        showFeedback("Bem-vindo!", "success");
+        showFeedback(texts.auth.feedback.welcome, "success");
         navigate("/persons");
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const msg =
         err.response?.status === 401
-          ? "E-mail ou senha incorretos."
-          : "Erro ao conectar com o servidor.";
+          ? texts.auth.feedback.invalid
+          : texts.auth.feedback.server;
 
       setApiError(msg);
       showFeedback(msg, "error");
@@ -80,13 +83,11 @@ export default function LoginForm() {
       }}
     >
       <Typography component="h1" variant="h4" fontWeight="bold" gutterBottom>
-        {isRegister ? "Criar Conta" : "Bem-vindo"}
+        {isRegister ? texts.auth.registerTitle : texts.auth.loginTitle}
       </Typography>
 
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-        {isRegister
-          ? "Preencha os dados para começar"
-          : "Insira suas credenciais para continuar"}
+        {isRegister ? texts.auth.registerSubtitle : texts.auth.loginSubtitle}
       </Typography>
 
       {apiError && (
@@ -106,7 +107,7 @@ export default function LoginForm() {
             required
             fullWidth
             autoFocus
-            label="E-mail"
+            label={texts.auth.email}
             type="email"
             autoComplete="email"
             value={email}
@@ -120,7 +121,7 @@ export default function LoginForm() {
           <TextField
             required
             fullWidth
-            label="Senha"
+            label={texts.auth.password}
             type="password"
             autoComplete="current-password"
             value={password}
@@ -139,7 +140,11 @@ export default function LoginForm() {
             sx={{ py: 1.5 }}
             disabled={loading}
           >
-            {loading ? "Carregando..." : isRegister ? "Cadastrar" : "Entrar"}
+            {loading
+              ? texts.auth.loading
+              : isRegister
+              ? texts.auth.registerButton
+              : texts.auth.loginButton}
           </Button>
         </Stack>
 
@@ -154,8 +159,8 @@ export default function LoginForm() {
             sx={{ textTransform: "none" }}
           >
             {isRegister
-              ? "Já tem uma conta? Login"
-              : "Não tem conta? Cadastre-se"}
+              ? texts.auth.switchToLogin
+              : texts.auth.switchToRegister}
           </Button>
         </Grid>
       </Box>
