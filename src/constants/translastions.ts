@@ -38,6 +38,18 @@ export const translations = {
         showPaged: "Voltar para paginação (10)",
         showAll: "Ver todos nesta lista (100)",
       },
+      serverWakeUp: {
+        title: "Iniciando Servidor",
+        message:
+          "O servidor está em modo de repouso ou indisponível. Aguarde enquanto reinicia (pode levar até 2 minutos).",
+        wait: "Tempo restante: ",
+        seconds: "s",
+        status: "Tentando conectar com a API...",
+        timeoutTitle: "Não foi possível conectar",
+        timeoutMessage:
+          "O servidor demorou muito para responder ou está offline.",
+        retry: "Tentar Novamente",
+      },
     },
     persons: {
       title: "Gerenciar Pessoas",
@@ -152,6 +164,17 @@ export const translations = {
       pagination: {
         showPaged: "Back to pagination (10)",
         showAll: "View all in this list (100)",
+      },
+      serverWakeUp: {
+        title: "Starting Server",
+        message:
+          "Server is waking up from sleep mode or unavailable. Please wait (up to 2 minutes).",
+        wait: "Time remaining: ",
+        seconds: "s",
+        status: "Attempting connection...",
+        timeoutTitle: "Connection Failed",
+        timeoutMessage: "The server took too long to respond or is offline.",
+        retry: "Try Again",
       },
     },
     persons: {
