@@ -28,9 +28,7 @@ export const ServerWakeUpModal = () => {
     try {
       const controller = new AbortController();
       const id = setTimeout(() => controller.abort(), timeoutMs);
-      await fetch(`${baseUrl}/api/person?pageNumber=1&pageSize=1`, {
-        signal: controller.signal,
-      });
+      await fetch(`${baseUrl}/health`, { signal: controller.signal });
       clearTimeout(id);
       return true;
     } catch {
