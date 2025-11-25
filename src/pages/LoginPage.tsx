@@ -1,7 +1,7 @@
 import { Grid, Paper } from "@mui/material";
 import LoginForm from "../components/auth/LoginForm";
 
-const SIDE_IMAGE = "/src/assets/images/login-bg.png";
+const SIDE_IMAGE = "/images/login-bg.png";
 
 export default function LoginPage() {
   return (
