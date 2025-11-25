@@ -71,7 +71,11 @@ export default function LoginForm() {
 
       if (isRegister && err.response?.data) {
         const errorData = JSON.stringify(err.response.data);
-        if (errorData.includes("Duplicate") || errorData.includes("taken")) {
+        if (
+          errorData.includes("exists") ||
+          errorData.includes("Duplicate") ||
+          errorData.includes("taken")
+        ) {
           msg = texts.auth.feedback.emailExists;
         }
       }
