@@ -17,6 +17,9 @@ export const translations = {
         welcome: "Bem-vindo!",
         invalid: "E-mail ou senha incorretos.",
         server: "Erro ao conectar com o servidor.",
+        emailExists: "Este e-mail já está cadastrado.",
+        passwordWeak:
+          "Senha fraca: use maiúsculas, minúsculas, números e símbolos.",
       },
       loading: "Carregando...",
     },
@@ -105,6 +108,7 @@ export const translations = {
         errorRegister: "Erro ao registrar.",
         successDelete: "Registro removido.",
         errorDelete: "Erro ao remover.",
+        doseExists: "Esta dose já foi registrada para esta vacina.",
       },
       form: {
         vaccineLabel: "Vacina",
@@ -144,6 +148,9 @@ export const translations = {
         welcome: "Welcome!",
         invalid: "Invalid email or password.",
         server: "Error connecting to server.",
+        emailExists: "Email already registered.",
+        passwordWeak:
+          "Weak password: use uppercase, lowercase, numbers, and symbols.",
       },
       loading: "Loading...",
     },
@@ -231,6 +238,7 @@ export const translations = {
         errorRegister: "Error registering.",
         successDelete: "Record removed.",
         errorDelete: "Error removing.",
+        doseExists: "This dose is already registered for this vaccine.",
       },
       form: {
         vaccineLabel: "Vaccine",

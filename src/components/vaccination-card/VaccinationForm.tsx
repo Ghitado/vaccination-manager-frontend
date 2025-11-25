@@ -1,19 +1,24 @@
 import { Autocomplete, Button, Grid, TextField } from "@mui/material";
 import { useState } from "react";
+import type { VaccinationRecordResponse } from "../../api/vaccinationRecord";
+import { useFeedback } from "../../contexts/FeedbackContext";
 import { useLanguage } from "../../contexts/LanguageContext";
 
 type Props = {
   vaccineOptions: { id: string; name: string }[];
+  existingRecords: VaccinationRecordResponse[];
   onAdd: (vaccineId: string, date: string, dose: number) => Promise<void>;
   loading: boolean;
 };
 
 export default function VaccinationForm({
   vaccineOptions,
+  existingRecords,
   onAdd,
   loading,
 }: Props) {
   const { texts } = useLanguage();
+  const { showFeedback } = useFeedback();
 
   const [vaccineId, setVaccineId] = useState<string | null>(null);
   const [date, setDate] = useState("");
@@ -36,6 +41,16 @@ export default function VaccinationForm({
         date: isDateInvalid,
         dose: isDoseInvalid,
       });
+
+      return;
+    }
+    const isDuplicate = existingRecords.some(
+      (r) => r.vaccineId === vaccineId && r.dose === Number(dose)
+    );
+
+    if (isDuplicate) {
+      showFeedback(texts.vaccinationCard.feedback.doseExists, "warning");
+      setErrors((prev) => ({ ...prev, dose: true }));
       return;
     }
 

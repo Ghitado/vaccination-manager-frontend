@@ -1,5 +1,5 @@
 import { Button, Pagination, Stack } from "@mui/material";
-import { useLanguage } from "../contexts/LanguageContext";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 type CustomPaginationProps = {
   page: number;

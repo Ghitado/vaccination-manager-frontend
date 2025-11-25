@@ -14,7 +14,7 @@ import {
   getVaccinesApi,
   type VaccineResponse,
 } from "../api/vaccine";
-import CustomPagination from "../components/CustomPagination";
+import CustomPagination from "../components/common/CustomPagination";
 import CreateVaccineForm from "../components/vaccines/CreateVaccineForm";
 import VaccineTable from "../components/vaccines/VaccineTable";
 import { useFeedback } from "../contexts/FeedbackContext";

@@ -35,7 +35,6 @@ export default function CreateVaccineForm({
         value={name}
         onChange={(e) => setName(e.target.value)}
         disabled={loading}
-        required
       />
       <Button
         type="submit"

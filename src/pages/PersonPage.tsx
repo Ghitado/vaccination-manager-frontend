@@ -8,7 +8,6 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 
-// 1. IMPORTE O HOOK
 import { useLanguage } from "../contexts/LanguageContext";
 
 import {
@@ -19,7 +18,7 @@ import {
 } from "../api/person";
 import { getVaccinesApi } from "../api/vaccine";
 
-import CustomPagination from "../components/CustomPagination";
+import CustomPagination from "../components/common/CustomPagination";
 import CreatePersonForm from "../components/persons/CreatePersonForm";
 import PersonTable from "../components/persons/PersonTable";
 import VaccinationCardModal from "../components/vaccination-card/VaccinationCardModal";

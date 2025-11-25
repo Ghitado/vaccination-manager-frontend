@@ -19,8 +19,8 @@ import {
   deleteVaccinationRecordApi,
 } from "../../api/vaccinationRecord";
 import { useFeedback } from "../../contexts/FeedbackContext";
-import CustomPagination from "../CustomPagination";
-import ScrollableText from "../ScrollableText";
+import CustomPagination from "../common/CustomPagination";
+import ScrollableText from "../common/ScrollableText";
 import VaccinationForm from "./VaccinationForm";
 import VaccinationHistory from "./VaccinationHistory";
 
@@ -124,6 +124,7 @@ export default function VaccinationCardModal({
           </Typography>
           <VaccinationForm
             vaccineOptions={vaccineOptions}
+            existingRecords={allRecords}
             onAdd={handleAdd}
             loading={saving}
           />

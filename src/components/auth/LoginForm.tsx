@@ -30,6 +30,8 @@ export default function LoginForm() {
   const { login } = useAuth();
   const { showFeedback } = useFeedback();
 
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setApiError("");
@@ -38,6 +40,13 @@ export default function LoginForm() {
       setEmailError(!email.trim());
       setPasswordError(!password.trim());
       setApiError(texts.auth.feedback.required);
+      return;
+    }
+
+    if (isRegister && !passwordRegex.test(password)) {
+      setPasswordError(true);
+      setApiError(texts.auth.feedback.passwordWeak);
+      showFeedback(texts.auth.feedback.passwordWeak, "warning");
       return;
     }
 
@@ -58,10 +67,18 @@ export default function LoginForm() {
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      const msg =
-        err.response?.status === 401
-          ? texts.auth.feedback.invalid
-          : texts.auth.feedback.server;
+      let msg = texts.auth.feedback.server;
+
+      if (isRegister && err.response?.data) {
+        const errorData = JSON.stringify(err.response.data);
+        if (errorData.includes("Duplicate") || errorData.includes("taken")) {
+          msg = texts.auth.feedback.emailExists;
+        }
+      }
+
+      if (!isRegister && err.response?.status === 401) {
+        msg = texts.auth.feedback.invalid;
+      }
 
       setApiError(msg);
       showFeedback(msg, "error");
@@ -104,7 +121,6 @@ export default function LoginForm() {
       >
         <Stack spacing={2}>
           <TextField
-            required
             fullWidth
             autoFocus
             label={texts.auth.email}
@@ -119,7 +135,6 @@ export default function LoginForm() {
           />
 
           <TextField
-            required
             fullWidth
             label={texts.auth.password}
             type="password"

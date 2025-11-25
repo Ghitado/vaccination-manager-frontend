@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import type { VaccineResponse } from "../../api/vaccine";
 import { useLanguage } from "../../contexts/LanguageContext";
-import ScrollableText from "../ScrollableText";
+import ScrollableText from "../common/ScrollableText";
 
 export default function VaccineTable({
   vaccines,

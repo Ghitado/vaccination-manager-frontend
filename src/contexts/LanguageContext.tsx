@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { translations } from "../constants/translastions";
+import { translations } from "../constants/translations";
 
 type Language = "pt" | "en";
 type TranslationType = typeof translations.pt;

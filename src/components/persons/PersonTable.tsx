@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import type { PaginatedPersonResponse } from "../../api/person";
 import { useLanguage } from "../../contexts/LanguageContext";
-import ScrollableText from "../ScrollableText";
+import ScrollableText from "../common/ScrollableText";
 
 type PersonTableProps = {
   persons: PaginatedPersonResponse[];
