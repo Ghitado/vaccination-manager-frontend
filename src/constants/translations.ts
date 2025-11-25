@@ -20,6 +20,7 @@ export const translations = {
         emailExists: "Este e-mail já está cadastrado.",
         passwordWeak:
           "Senha fraca: use maiúsculas, minúsculas, números e símbolos.",
+        emailFormat: "Formato de e-mail inválido.",
       },
       loading: "Carregando...",
     },
@@ -151,6 +152,7 @@ export const translations = {
         emailExists: "Email already registered.",
         passwordWeak:
           "Weak password: use uppercase, lowercase, numbers, and symbols.",
+        emailFormat: "Invalid email format.",
       },
       loading: "Loading...",
     },

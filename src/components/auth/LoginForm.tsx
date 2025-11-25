@@ -69,18 +69,23 @@ export default function LoginForm() {
     } catch (err: any) {
       let msg = texts.auth.feedback.server;
 
-      if (isRegister && err.response?.data) {
-        const errorData = JSON.stringify(err.response.data);
-        if (
-          errorData.includes("exists") ||
-          errorData.includes("Duplicate") ||
-          errorData.includes("taken")
-        ) {
-          msg = texts.auth.feedback.emailExists;
-        }
-      }
+      const status = err.response?.status;
+      const errorData = err.response?.data
+        ? JSON.stringify(err.response.data).toLowerCase()
+        : "";
 
-      if (!isRegister && err.response?.status === 401) {
+      if (status === 400) {
+        if (errorData.includes("exists") || errorData.includes("duplicate")) {
+          msg = texts.auth.feedback.emailExists;
+        } else if (
+          errorData.includes("email") ||
+          errorData.includes("invalid")
+        ) {
+          msg = texts.auth.feedback.emailFormat;
+        } else {
+          msg = texts.auth.feedback.invalid;
+        }
+      } else if (status === 401) {
         msg = texts.auth.feedback.invalid;
       }
 
