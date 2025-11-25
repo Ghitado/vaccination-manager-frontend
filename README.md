@@ -30,13 +30,13 @@ It enables patient registration, vaccine inventory management, and the recording
 ## Tech Stack
 
 - **Core:** React 19, TypeScript, Vite
-- **Roteamento:** React Router DOM v7
+- **Routing:** React Router DOM
 - **UI Framework:** Material UI (MUI)
-- **Cliente HTTP:** Axios (com Interceptors para Refresh Token)
-- **Gerenciamento de Estado:** React Context API (Auth & Feedback)
-- **Validação:** Zod (Schema Validation)
-- **Autenticação:** JWT com Refresh Token (via js-cookie)
-- **Ícones:** MUI Icons Material
+- **HTTP Client:** Axios (with Interceptors for Refresh Token)
+- **State Management:** React Context API (Auth and Feedback)
+- **Validation:** Zod (Schema Validation)
+- **Authentication:** JWT with Refresh Token (via js-cookie)
+- **Icons:** MUI Icons Material
 - **Internationalization:** Custom React Context (No external libs)
 
 ---
