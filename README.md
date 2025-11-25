@@ -3,7 +3,7 @@
 This repository houses the frontend interface for the **"Vaccination Manager"** technical challenge.
 It is a modern Single Page Application (SPA) built with **React 19**, **TypeScript**, and **Vite**, designed to interact securely and efficiently with a .NET backend.
 
-The project prioritizes a smooth User Experience (UX), clean code, and a component-based architecture.
+![System Demonstration](./.github/assets/demo.gif)
 
 ---
 
