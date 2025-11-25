@@ -20,11 +20,13 @@ api.interceptors.response.use(
   async (err) => {
     const originalReq = err.config;
     const isRefreshEndpoint = originalReq.url?.includes("/refresh");
+    const isLoginRequest = originalReq.url?.includes("/login");
 
     if (
       err.response?.status === 401 &&
       !originalReq._retry &&
-      !isRefreshEndpoint
+      !isRefreshEndpoint &&
+      !isLoginRequest
     ) {
       originalReq._retry = true;
 
