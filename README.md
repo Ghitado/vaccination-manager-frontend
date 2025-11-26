@@ -3,6 +3,8 @@
 This repository houses the frontend interface for the **"Vaccination Manager"** technical challenge.
 It is a modern Single Page Application (SPA) built with **React 19**, **TypeScript**, and **Vite**, designed to interact securely and efficiently with a .NET backend.
 
+**Backend Repository:** [Vaccination Manager Backend](https://github.com/Ghitado/vaccination-manager-backend)
+
 ![System Demonstration](./.github/assets/demo.gif)
 
 ---
