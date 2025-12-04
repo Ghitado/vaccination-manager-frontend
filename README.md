@@ -3,9 +3,9 @@
 This repository houses the frontend interface for the **"Vaccination Manager"** technical challenge.
 It is a modern Single Page Application (SPA) built with **React 19**, **TypeScript**, and **Vite**, designed to interact securely and efficiently with a .NET backend.
 
-**Frontend Deploy Vercel:** [Vaccination Manager Frontend Deploy](https://vaccination-manager-frontend.vercel.app/)
-**Backend Repository:** [Vaccination Manager Backend](https://github.com/Ghitado/vaccination-manager-backend)
-**Backend Swagger Documentation Render:** [Vaccination Manager Backend Swagger](https://vaccination-manager-backend.onrender.com/swagger)
+- **Frontend Deploy Vercel:** [Vaccination Manager Frontend Deploy](https://vaccination-manager-frontend.vercel.app/)
+- **Backend Repository:** [Vaccination Manager Backend](https://github.com/Ghitado/vaccination-manager-backend)
+- **Backend Swagger Documentation Render:** [Vaccination Manager Backend Swagger](https://vaccination-manager-backend.onrender.com/swagger)
 
 ![System Demonstration](./.github/assets/demo.gif)
 
