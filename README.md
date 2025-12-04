@@ -3,7 +3,9 @@
 This repository houses the frontend interface for the **"Vaccination Manager"** technical challenge.
 It is a modern Single Page Application (SPA) built with **React 19**, **TypeScript**, and **Vite**, designed to interact securely and efficiently with a .NET backend.
 
+**Frontend Deploy Vercel:** [Vaccination Manager Frontend Deploy](https://vaccination-manager-frontend.vercel.app/)
 **Backend Repository:** [Vaccination Manager Backend](https://github.com/Ghitado/vaccination-manager-backend)
+**Backend Swagger Documentation Render:** [Vaccination Manager Backend Swagger](https://vaccination-manager-backend.onrender.com/swagger)
 
 ![System Demonstration](./.github/assets/demo.gif)
 
@@ -36,7 +38,7 @@ It enables patient registration, vaccine inventory management, and the recording
 - **UI Framework:** Material UI (MUI)
 - **HTTP Client:** Axios (with Interceptors for Refresh Token)
 - **State Management:** React Context API (Auth and Feedback)
-- **Validation:** Zod (Schema Validation)
+- **Validation:** Manual validation (State-based)
 - **Authentication:** JWT with Refresh Token (via js-cookie)
 - **Icons:** MUI Icons Material
 - **Internationalization:** Custom React Context (No external libs)
@@ -45,9 +47,9 @@ It enables patient registration, vaccine inventory management, and the recording
 
 ## Features
 
-### Authentication & Security
+### Authentication and Security
 
-- **Login & Registration:** Professional "Split Screen" layout with instant visual validation.
+- **Login and Registration:** Professional "Split Screen" layout with instant visual validation.
 - **Protected Routes:** Automatically redirects unauthenticated users to the login page.
 - **Silent Refresh:** Automatically renews access tokens in the background upon expiration, without logging the user out.
 - **Logout:** Securely clears cookies and redirects the user.
@@ -139,10 +141,10 @@ src/
 │   ├── persons/        # Person-specific components
 │   ├── vaccination-card/ # Complex logic for the Vaccination Modal
 │   │   ├── VaccinationCardModal.tsx  # Orchestrator
-│   │   ├── VaccinationForm.tsx       # Zod-validated form
+│   │   ├── VaccinationForm.tsx       # Manual validation form (State-based)
 │   │   └── VaccinationHistory.tsx    # History table
 │   └── vaccines/
-├── constants/          # Static Data & Dictionaries (translations.ts)
+├── constants/          # Static Data and Dictionaries (translations.ts)
 ├── contexts/           # Global State (Auth, Feedback, Language)
 ├── pages/              # Main screens (LoginPage, PersonPage, VaccinePage)
 ├── routes/             # Route configuration (AppRoutes, ProtectedRoute)
@@ -170,7 +172,7 @@ Navigation is handled by **React Router DOM**, ensuring a smooth Single Page App
 
 The goal here was balance: delivering clean, functional code (MVP) without **over-engineering**.
 
-### 1. Cookies & Security
+### 1. Cookies and Security
 
 I chose `js-cookie` to manage JWTs. While I acknowledge that **HttpOnly Cookies** are the gold standard against XSS, handling them client-side allowed for a faster implementation of the _Refresh Token_ flow and login persistence without requiring complex CORS/Proxy configurations on the backend at this stage.
 
